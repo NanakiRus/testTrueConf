@@ -16,27 +16,26 @@ class Event
     protected $timezone = null;
     protected $time = null;
     protected $date = null;
+    public $dateTime = [];
+    public $eventDay = [];
 
     public function __construct($time = null, $timezone = null)
     {
         date_default_timezone_set('UTC');
 
-        if (isset($time)) {
-            $this->time = $time;
-        }
+        $this->timezone = (int)$timezone * 60 ?? (int)date('Z');
 
-        if (isset($timezone)) {
-            $this->timezone = abs($timezone * 60);
-        } else {
-            $this->timezone = abs(date('Z'));
-        }
+        $this->time = $time ?? date('H:i', time() + $this->timezone);
+
+        $this->dateTime = new \DateTime();
+
 
     }
 
     public function eventDays($days)
     {
         $allDays = [
-            'mondey' => self::MONDAY,
+            'monday' => self::MONDAY,
             'tuesday' => self::TUESDAY,
             'wednesday' => self::WEDNESDAY,
             'thursday' => self::THURSDAY,
@@ -45,28 +44,29 @@ class Event
             'sunday' => self::SUNDAY,
         ];
 
-        $eventDay = [];
-
         foreach ($allDays as $day => $mask) {
             if ($days & $mask) {
-                $eventDay[] = $day;
+                $this->eventDay[$day] = new \DateTime('next ' . $day . ' ' . $this->time);
             }
         }
 
-        return $eventDay;
+        return $this->eventDay;
     }
 
-    public function event()
+    public function dateTime()
     {
+        $data = [];
 
-    }
-
-    protected function dateTime()
-    {
-        if (!isset($this->time)) {
-            $this->time = date('H:i', time() + $this->timezone);
+        foreach ($this->eventDay as $key => $value) {
+            $data[$key] = $value->format('Y-m-d H:i');
         }
 
-        $this->date = date('Y-m-d', time() + $this->timezone);
+        return $data;
+
+//        if (!isset($this->time)) {
+//            $this->time = date('H:i', time() + $this->timezone);
+//        }
+//
+//        $this->date = date('Y-m-d', time() + $this->timezone);
     }
 }
