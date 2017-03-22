@@ -16,8 +16,8 @@ class Event
     protected $timezone = null;
     protected $time = null;
     protected $date = null;
-    public $dateTime = [];
-    public $eventDay = [];
+    protected $dateTimeClass = null;
+    protected $eventDay = [];
 
     public function __construct($time = null, $timezone = null)
     {
@@ -27,9 +27,7 @@ class Event
 
         $this->time = $time ?? date('H:i', time() + $this->timezone);
 
-        $this->dateTime = new \DateTime();
-
-
+        $this->dateTimeClass = new \DateTime();
     }
 
     public function eventDays($days)
@@ -46,7 +44,8 @@ class Event
 
         foreach ($allDays as $day => $mask) {
             if ($days & $mask) {
-                $this->eventDay[$day] = new \DateTime('next ' . $day . ' ' . $this->time);
+                $this->eventDay[$day]['date'] = new \DateTime('next ' . $day . ' ' . $this->time);
+                $this->eventDay[$day]['interval'] = $this->dateTimeClass->diff($this->eventDay[$day]['date']);
             }
         }
 
@@ -57,16 +56,13 @@ class Event
     {
         $data = [];
 
-        foreach ($this->eventDay as $key => $value) {
-            $data[$key] = $value->format('Y-m-d H:i');
+        foreach ($this->eventDay as $day => $values) {
+            $data[$day]['date'] = $values['date']->format('Y-m-d H:i');
+            $data[$day]['interval'] = $values['interval']->format('%r%a д., %H:%I%');
         }
 
-        return $data;
+        asort($data);
 
-//        if (!isset($this->time)) {
-//            $this->time = date('H:i', time() + $this->timezone);
-//        }
-//
-//        $this->date = date('Y-m-d', time() + $this->timezone);
+        return $data;
     }
 }

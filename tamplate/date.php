@@ -8,8 +8,8 @@
     <title>Document</title>
 </head>
 <body style="width: 800px; margin: 0 auto;">
-<?php foreach ($this->days as $day => $time) : ?>
-<p><?php echo $day; ?><br /><?php echo $time; ?></p>
-<?php endforeach; ?>
+<?php $event = array_shift($this->days); ?>
+<p>До ближайшего мероприятия осталось <?php echo $event['interval']?><br />
+Оно начнётся <?php echo $event['date']?></p>
 </body>
 </html>
