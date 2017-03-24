@@ -44,19 +44,19 @@ class Event
 
         foreach ($allDays as $day => $mask) {
             if ($days & $mask) {
+
                 $this->eventDay[$day]['date'] = new \DateTime($day . ' ' . $this->time);
 
-                if (new \DateTime('now') >= new \DateTime($day . ' ' . $this->time)) {
+                $this->dateTimeClass->modify($this->timezone . ' second');
+
+                if ($this->dateTimeClass >= new \DateTime($day . ' ' . $this->time)) {
                     $this->eventDay[$day]['date'] = new \DateTime('next ' . $day . ' ' . $this->time);
                 }
 
-                $this->dateTimeClass->modify($this->timezone. ' second');
-
                 $this->eventDay[$day]['interval'] = $this->dateTimeClass->diff($this->eventDay[$day]['date']);
+
             }
         }
-
-        return $this->eventDay;
     }
 
     public function dateTime()
@@ -68,6 +68,8 @@ class Event
             $data[$day]['interval'] = $values['interval']->format('%r%a д., %H:%I%');
         }
 
-        return asort($data);
+        asort($data);
+
+        return $data;
     }
 }
