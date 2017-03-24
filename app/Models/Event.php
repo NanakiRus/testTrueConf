@@ -28,6 +28,7 @@ class Event
         $this->time = $time ?? date('H:i', time() + $this->timezone);
 
         $this->dateTimeClass = new \DateTime();
+        $this->dateTimeClass->modify($this->timezone . ' second');
     }
 
     public function eventDays($days)
@@ -47,8 +48,6 @@ class Event
 
                 $this->eventDay[$day]['date'] = new \DateTime($day . ' ' . $this->time);
 
-                $this->dateTimeClass->modify($this->timezone . ' second');
-
                 if ($this->dateTimeClass >= new \DateTime($day . ' ' . $this->time)) {
                     $this->eventDay[$day]['date'] = new \DateTime('next ' . $day . ' ' . $this->time);
                 }
@@ -57,6 +56,7 @@ class Event
 
             }
         }
+
     }
 
     public function dateTime()
