@@ -44,8 +44,20 @@ class Event
 
         foreach ($allDays as $day => $mask) {
             if ($days & $mask) {
-                $this->eventDay[$day]['date'] = new \DateTime('next ' . $day . ' ' . $this->time);
+                $this->eventDay[$day]['date'] = new \DateTime($day . ' ' . $this->time);
+
+                if (new \DateTime('now') >= new \DateTime($day . ' ' . $this->time)) {
+                    $this->eventDay[$day]['date'] = new \DateTime('next ' . $day . ' ' . $this->time);
+                }
+
+                $this->dateTimeClass->modify($this->timezone. ' second');
+
                 $this->eventDay[$day]['interval'] = $this->dateTimeClass->diff($this->eventDay[$day]['date']);
+//                if (1 === $this->eventDay[$day]['interval']->invert) {
+//                    $this->eventDay[$day]['date'] = new \DateTime('next ' . $day . ' ' . $this->time);
+//                    $this->eventDay[$day]['interval'] = $this->dateTimeClass->diff($this->eventDay[$day]['date']);
+//                }
+
             }
         }
 

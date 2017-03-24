@@ -9,7 +9,7 @@
 </head>
 <body style="width: 800px; margin: 0 auto;">
 <?php $event = array_shift($this->days); ?>
-<p>До ближайшего мероприятия осталось <?php echo $event['interval']?><br />
-Оно начнётся <?php echo $event['date']?></p>
+<p>До ближайшего мероприятия осталось <?php echo $event['interval'] ?><br/>
+    Оно начнётся <?php echo $event['date'] ?></p>
 </body>
 </html>
