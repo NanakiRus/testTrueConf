@@ -53,11 +53,6 @@ class Event
                 $this->dateTimeClass->modify($this->timezone. ' second');
 
                 $this->eventDay[$day]['interval'] = $this->dateTimeClass->diff($this->eventDay[$day]['date']);
-//                if (1 === $this->eventDay[$day]['interval']->invert) {
-//                    $this->eventDay[$day]['date'] = new \DateTime('next ' . $day . ' ' . $this->time);
-//                    $this->eventDay[$day]['interval'] = $this->dateTimeClass->diff($this->eventDay[$day]['date']);
-//                }
-
             }
         }
 
@@ -73,8 +68,6 @@ class Event
             $data[$day]['interval'] = $values['interval']->format('%r%a д., %H:%I%');
         }
 
-        asort($data);
-
-        return $data;
+        return asort($data);
     }
 }

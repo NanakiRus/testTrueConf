@@ -7,8 +7,6 @@ class View
 {
     use MagicTrait;
 
-    protected $data = [];
-
     public function view($path)
     {
         foreach ($this->data as $key => $value) {
